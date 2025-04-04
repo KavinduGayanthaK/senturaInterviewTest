@@ -88,7 +88,7 @@ public class UserService {
         }
     }
 
-    public UserDTO updateUser(String userId, UserDTO userDTO) {
+    public UserDTO updateUser(String userId, UserDTO userDTO) throws Exception {
         String endpoint = url + "/api/users/" + userId;
 
         try {
@@ -109,10 +109,8 @@ public class UserService {
                     throw new RuntimeException("Failed to update user: " + response.message());
                 }
             }
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error converting user to JSON", e);
-        } catch (IOException e) {
-            throw new RuntimeException("Error making HTTP request to Weavy API", e);
+        } catch (Exception e) {
+            throw new Exception("Error converting user to JSON", e);
         }
     }
 }
