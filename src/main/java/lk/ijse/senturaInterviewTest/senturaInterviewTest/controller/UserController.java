@@ -3,6 +3,7 @@ package lk.ijse.senturaInterviewTest.senturaInterviewTest.controller;
 import jakarta.validation.Valid;
 import lk.ijse.senturaInterviewTest.senturaInterviewTest.dto.UserDTO;
 import lk.ijse.senturaInterviewTest.senturaInterviewTest.service.UserService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1/user")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class UserController {
 
     private final UserService userService;
@@ -23,6 +24,11 @@ public class UserController {
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
-
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable String userId,
+                                           @RequestParam(required = false) Boolean trashed) {
+        UserDTO user = userService.getUser(userId, trashed);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
 }

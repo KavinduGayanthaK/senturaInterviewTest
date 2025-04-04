@@ -64,5 +64,27 @@ public class UserService {
         }
     }
 
+    public UserDTO getUser(String userId, Boolean trashed) {
+        String endpoint = url + "/api/users/" + userId;
+        if (trashed != null) {
+            endpoint += "?trashed=" + trashed;
+        }
 
+        Request request = new Request.Builder()
+                .url(endpoint)
+                .get()
+                .addHeader("Authorization", "Bearer " + apikey)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful() && response.body() != null) {
+                String responseBody = response.body().string();
+                return objectMapper.readValue(responseBody, UserDTO.class);
+            } else {
+                throw new RuntimeException("Failed to get user: " + response.message());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
